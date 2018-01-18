@@ -5,7 +5,7 @@ import java.util.*;
 public class Theatre {
 	
 	private final String theatreName;
-	private Collection<Seat> seats = new LinkedList<>();
+	public List<Seat> seats = new LinkedList<>();
 	
 	public Theatre(String theatreName, int numRows, int seatsPerRow) {
 		this.theatreName = theatreName;
@@ -24,22 +24,60 @@ public class Theatre {
 	}
 	
 	public boolean reserveSeat(String seatNum) {
-		Seat requestedSeat = null;
+		Seat requestedSeat = new Seat(seatNum);
+		int foundSeat = Collections.binarySearch(seats, requestedSeat, null);
 		
-		for(Seat seat: seats) {
-			if(seat.getSeatNum().equals(seatNum)) {
-				requestedSeat = seat;
-				break;
-			}
-		}
-		
-		if(requestedSeat == null) {
+		if(foundSeat >= 0) {
+			return seats.get(foundSeat).reserved	();
+		} else {
 			System.out.println("Unable to find a seat");
 			return false;
 		}
 		
-		return requestedSeat.reserved();
+		// old method
+//		for(Seat seat: seats) {
+//			System.out.print(".");
+//			if(seat.getSeatNum().equals(seatNum)) {
+//				requestedSeat = seat;
+//				break;
+//			}
+//		}
+//		
+//		if(requestedSeat == null) {
+//			System.out.println("Unable to find a seat");
+//			return false;
+//		}
+//		
+//		return requestedSeat.reserved();
 	}
+	
+/*
+	public boolean reserveSeatSample(String seatNum) {
+		int low = 0;
+		int high = seats.size()-1;
+		
+		while(low <= high) {
+		//	System.out.print(".");
+			int mid = (low + high) /2;
+			Seat midVal = seats.get(mid);
+			int cmp = midVal.getSeatNum().compareTo(seatNum);
+			
+		//	System.out.println(cmp + " " + low + " " + mid + " " + high);
+			
+			if(cmp < 0) {
+				low = mid +1;
+			} else if (cmp > 0) {
+				high = mid -1;
+			} else {
+				return seats.get(mid).reserved();
+			}
+			
+		}
+		
+		System.out.println("Not found");
+		return false;
+	}
+*/
 	
 	public void getSeats() {
 		for(Seat seat: seats) {
@@ -47,7 +85,7 @@ public class Theatre {
 		}
 	}
 
-	private class Seat{
+	public class Seat implements Comparable<Seat>{
 		
 		private final String seatNum;
 		private boolean reserved = false;
@@ -56,6 +94,11 @@ public class Theatre {
 			this.seatNum = seatNum;
 		}
 		
+		@Override
+		public int compareTo(Seat seat) {
+			return this.seatNum.compareToIgnoreCase(seat.getSeatNum());
+		}
+
 		public boolean reserved() {
 			if(!this.reserved) {
 				this.reserved = true;
