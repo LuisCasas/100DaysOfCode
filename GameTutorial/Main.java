@@ -17,7 +17,7 @@ public class Main extends JFrame{
 		setSize(400, 300);
 		setResizable(false);
 		
-		setTitle("Moving craft");
+		setTitle("Shooting craft");
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	
