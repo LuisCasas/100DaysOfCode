@@ -26,6 +26,14 @@ public class Craft extends Sprite{
     public void move() {
     		x += dx;
     		y += dy;
+    		
+    		if(x < 1) {
+    			x = 1;
+    		}
+    		
+    		if(y < 1) {
+    			y = 1;
+    		}
     }
     
     public int getX() {
@@ -87,6 +95,4 @@ public class Craft extends Sprite{
 			dy = 0;
 		}
     }
-    
-    
 }

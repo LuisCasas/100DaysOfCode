@@ -1,7 +1,9 @@
 package com.luiscasas;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import javax.swing.ImageIcon;
+
 
 public class Sprite {
 	
@@ -50,5 +52,9 @@ public class Sprite {
     public void setVisible(boolean vis) {
 		this.vis = vis;
 	}
+    
+    public Rectangle getBounds() {
+    		return new Rectangle(x, y, width, height);
+    }
     
 }

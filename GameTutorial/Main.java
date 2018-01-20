@@ -14,10 +14,11 @@ public class Main extends JFrame{
 		// add(new Board());
 		add(new Window());
 		
-		setSize(400, 300);
+		// setSize(400, 300);
 		setResizable(false);
+		pack();
 		
-		setTitle("Shooting craft");
+		setTitle("Space shooter");
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	
