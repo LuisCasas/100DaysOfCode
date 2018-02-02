@@ -1,0 +1,20 @@
+package com.luiscasas;
+
+import javax.swing.*;
+import java.awt.Graphics;
+
+public class InputUI extends JFrame{
+
+		public static void main(String[] args){
+			
+			String name = JOptionPane.showInputDialog("What's your name?");		
+			String input = JOptionPane.showInputDialog("How old are you " + name + "?");
+			int age = Integer.parseInt(input);
+			
+			System.out.print("Hello " + name);
+			System.out.println("Your age is " + age);
+			
+			System.exit(0);
+		}
+	
+}
