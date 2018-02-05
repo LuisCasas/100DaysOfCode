@@ -51,6 +51,19 @@ public class Main {
 			System.out.println("\t"+ moon.getName());
 		}
 		
+		HeavenlyBody earth = new HeavenlyBody("Earth", 3);
+		planets.add(earth);
+		
+		for(HeavenlyBody planet : planets) {
+			System.out.println("\t" + planet.getName() + " - " + planet.getOrbitalPlanet());
+		}	
+		
+		Object o = new Object();
+		o.equals(o);
+		
+		"pluto".equals("");
+		
+		
 	}
 
 }
