@@ -12,28 +12,30 @@ public class Locations implements Map<Integer, Location>{
 	private static Map<Integer, Location> locations = new HashMap<>();
 	
 	public static void main(String[] args) throws IOException {
+		
+		try(FileWriter locFile = new FileWriter("location.txt")){
+			for(Location location : locations.values()) {
+				locFile.write(location.getLocationID() + ", "+location.getDescription() + "\n");
+			}
+		}
+		
+/*		
 		FileWriter locFile = null;
 		try {
 			
 			locFile = new FileWriter("location.txt");
 			for(Location location : locations.values()) {
 				locFile.write(location.getLocationID() + ", "+location.getDescription() + "\n");
+			//	throw new IOException("Test exception throw error");
 			}
 			
-		} catch(IOException e) {
-			System.out.println("In catch block");
-			e.printStackTrace();
 		} finally {
-			System.out.println("");
-			try {
-				if(locFile != null) {
-					locFile.close();
-				}
-			} catch(IOException e) {
-				System.out.println("Finally catch block");
-				e.printStackTrace();
+			System.out.println("Finally block called");
+			if(locFile != null) {
+				locFile.close();
 			}
 		}
+*/		
 	}
 	
 	static {
