@@ -23,9 +23,9 @@ public class Location {
 		
 	}
 	
-//	public void addExist(String direction, int location){
-//		exits.put(direction, location);
-//	}
+	protected void addExit(String direction, int location){
+		exits.put(direction, location);
+	}
 
 	public int getLocationID() {
 		return locationID;
