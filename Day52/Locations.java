@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,7 +27,12 @@ public class Locations implements Map<Integer, Location>{
 	
 	public static void main(String[] args) throws IOException {
 	
-		try (DataOutputStream locFile = new DataOutputStream(new BufferedOutputStream( new FileOutputStream("locations.dat")));){
+		try (ObjectOutputStream locFile = new ObjectOutputStream(new BufferedOutputStream( new FileOutputStream("locations.dat")));){
+		
+			for(Location location : locations.values()) {
+				locFile.writeObject(location);
+			}
+/*			
 			for(Location location : locations.values()) {
 				locFile.writeInt(location.getLocationID());
 				locFile.writeUTF(location.getDescription());
@@ -39,15 +46,32 @@ public class Locations implements Map<Integer, Location>{
 					}
 				}
 			}
+*/		
 		}
 	}
 
 	static {
 		
-		try (DataInputStream locFile = new DataInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))){
+		try (ObjectInputStream locFile = new ObjectInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))){
 			
 			boolean endFile = false;
 			
+			while(!endFile) {
+				
+				try {
+					Location location = (Location) locFile.readObject();
+					
+					System.out.println("Read location: " + location.getLocationID() + " : " + location.getDescription());
+					System.out.println("Found " + location.getExits().size() + " exits");
+					
+					locations.put(location.getLocationID(), location);
+				} catch (IOException io) {
+					System.out.println("IOException" + io.getMessage());
+				} catch (ClassNotFoundException e) {
+					System.out.println("ClassNotFound" + e.getMessage());
+				}
+			}
+			/*
 			while(!endFile) {
 				
 				try {
@@ -66,11 +90,13 @@ public class Locations implements Map<Integer, Location>{
 						System.out.println("\t\t" + direction + "," + destination);
 					}
 					
-				locations.put(locID, new Location(locID, description, exits));
+					locations.put(locID, new Location(locID, description, exits));
+				
 				} catch (EOFException e) {
 					endFile = true;
 				}
 			}
+		*/	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
