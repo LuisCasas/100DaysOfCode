@@ -2,7 +2,11 @@ package com.luiscasas;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -40,6 +44,38 @@ public class Locations implements Map<Integer, Location>{
 
 	static {
 		
+		try (DataInputStream locFile = new DataInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))){
+			
+			boolean endFile = false;
+			
+			while(!endFile) {
+				
+				try {
+					Map<String, Integer> exits = new LinkedHashMap<>();
+					int locID = locFile.readInt();
+					String description = locFile.readUTF();
+					int numExits = locFile.readInt();
+					
+					System.out.println("Read location: " + locID + " : " + description);
+					System.out.println("Found " + numExits + " exits");
+					
+					for(int i = 0; i < numExits; i++) {
+						String direction = locFile.readUTF();
+						int destination = locFile.readInt();
+						exits.put(direction, destination);
+						System.out.println("\t\t" + direction + "," + destination);
+					}
+					
+				locations.put(locID, new Location(locID, description, exits));
+				} catch (EOFException e) {
+					endFile = true;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+/*		
 		try (BufferedReader locFile = new BufferedReader(new FileReader("locations_big.txt"))){
 			
 			String input;
@@ -74,7 +110,8 @@ public class Locations implements Map<Integer, Location>{
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 	
+		} 
+		*/	
 	}
 	
 	@Override
