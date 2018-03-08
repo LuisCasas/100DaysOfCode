@@ -2,12 +2,11 @@ package com.luiscasas;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,7 +22,7 @@ import java.util.Set;
 
 public class Locations implements Map<Integer, Location>{
 
-	private static Map<Integer, Location> locations = new LinkedHashMap<Integer, Location>();
+	private static Map<Integer, Location> locations = new LinkedHashMap<>();
 	
 	public static void main(String[] args) throws IOException {
 	
@@ -57,7 +56,8 @@ public class Locations implements Map<Integer, Location>{
 			System.out.println("IOException:" + io.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println("ClassNotFound" + e.getMessage());
-		}
+		} 
+			
 	}
 	
 	@Override
