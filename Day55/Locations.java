@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
@@ -52,6 +53,8 @@ public class Locations implements Map<Integer, Location>{
 					endFile = true;
 				}
 			}
+		} catch (InvalidClassException e) {
+			System.out.println("InvalidClassException:" + e.getMessage());
 		} catch (IOException io) {
 			System.out.println("IOException:" + io.getMessage());
 		} catch (ClassNotFoundException e) {
