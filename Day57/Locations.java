@@ -7,6 +7,7 @@ public class Locations implements Map<Integer, Location>{
 
 	private static Map<Integer, Location> locations = new LinkedHashMap<>();
 	private static Map<Integer, IndexRecord> index = new LinkedHashMap<>();
+	private static RandomAccessFile ra;
 	
 	public static void main(String[] args) throws IOException {
 	
@@ -42,9 +43,38 @@ public class Locations implements Map<Integer, Location>{
 				
 				startPointer = (int) rao.getFilePointer();
 			}
+			
+			rao.seek(indexStart);
+			
+			for(Integer locationID : index.keySet()) {
+				rao.writeInt(locationID);
+				rao.writeInt(index.get(locationID).getStartByte());
+				rao.writeInt(index.get(locationID).getLenght());
+			}
+		}
+	}
+	
+	static {
+		try {
+			ra = new RandomAccessFile("location_rand.dat", "rwd");
+			int numLocations = ra.readInt();
+			long locationStartPoint = ra.readInt();
+			
+			while(ra.getFilePointer() < locationStartPoint) {
+				int locationID = ra.readInt();
+				int locationStart = ra.readInt();
+				int locationLength = ra.readInt();
+				
+				IndexRecord record = new IndexRecord(locationStart, locationLength);
+				index.put(locationID, record);
+			}
+			
+		} catch(IOException io) {
+			System.out.println("IOException: " + io.getMessage());
 		}
 	}
 
+/*
 	static {
 		
 		try (ObjectInputStream locFile = new ObjectInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))){
@@ -71,9 +101,8 @@ public class Locations implements Map<Integer, Location>{
 		} catch (ClassNotFoundException e) {
 			System.out.println("ClassNotFound" + e.getMessage());
 		} 
-			
 	}
-	
+*/	
 	@Override
 	public void clear() {
 		locations.clear();
