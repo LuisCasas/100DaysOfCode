@@ -3,6 +3,7 @@ package com.luiscasas;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.FileSystems;
@@ -18,8 +19,8 @@ public class Main {
 		try(FileOutputStream binFile = new FileOutputStream("data.dat");
 			FileChannel binChannel = binFile.getChannel()){
 			
-			byte[] outputByte = "Hello world!".getBytes();
-			ByteBuffer buffer = ByteBuffer.wrap(outputByte);
+			byte[] outputBytes = "Hello world!".getBytes();
+			ByteBuffer buffer = ByteBuffer.wrap(outputBytes);
 			int numBytes = binChannel.write(buffer);
 			System.out.println("Number of bytes " + numBytes);
 			
@@ -33,19 +34,52 @@ public class Main {
 			intBuffer.putInt(-85032);
 			intBuffer.flip();
 			numBytes = binChannel.write(intBuffer);
-			System.out.println("Number of bytes " + numBytes);			
+			System.out.println("Number of bytes " + numBytes);		
+			
+			RandomAccessFile ra = new RandomAccessFile("data.dat", "rwd");
+			FileChannel channel = ra.getChannel();
+			long numBytesRead = channel.read(buffer);
+			outputBytes[0] = 'a';
+			outputBytes[1] = 'b';
+			buffer.flip();
+			if(buffer.hasArray()) {
+				System.out.println("Buffer bytes: " + new String(buffer.array()));
+			}
+			
+			// absolute read:
+			intBuffer.flip();
+			numBytesRead = channel.read(intBuffer);	
+			System.out.println(intBuffer.getInt(0));
+			intBuffer.flip();
+			numBytesRead = channel.read(intBuffer);	
+			System.out.println(intBuffer.getInt(0));			
+			
+			// relative read:
+//			intBuffer.flip();
+//			numBytesRead = channel.read(intBuffer);
+//			intBuffer.flip();
+//			System.out.println(intBuffer.getInt());
+//			intBuffer.flip();
+//			numBytesRead = channel.read(intBuffer);
+//			intBuffer.flip();
+//			System.out.println(intBuffer.getInt());
 			
 			
+			channel.close();
+			ra.close();
 			
-//			FileInputStream file = new FileInputStream("data.txt");
-//			FileChannel channel = file.getChannel();
-			
-//			Path dataPath = FileSystems.getDefault().getPath("data.txt");
-//			Files.write(dataPath, "\nLine 5".getBytes("UTF-8"), StandardOpenOption.APPEND);
-//			List<String> lines = Files.readAllLines(dataPath);
-//			for(String line : lines) {
-//				System.out.println(line);
-//			}
+			// System.out.println("Output bytes: " + new String(outputBytes));
+//			RandomAccessFile ra = new RandomAccessFile("data.dat", "rwd");
+//			byte[] b = new byte[outputBytes.length];
+//			ra.read(b);
+//			
+//			System.out.println(new String(b));
+//			
+//			long int1 = ra.readInt();
+//			long int2 = ra.readInt();
+//			
+//			System.out.println(int1);
+//			System.out.println(int2);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
