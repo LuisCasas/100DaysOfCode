@@ -19,8 +19,22 @@ public class Main {
 		try(FileOutputStream binFile = new FileOutputStream("data.dat");
 			FileChannel binChannel = binFile.getChannel()){
 			
+			ByteBuffer buffer = ByteBuffer.allocate(100);
 			byte[] outputBytes = "Hello world!".getBytes();
-			ByteBuffer buffer = ByteBuffer.wrap(outputBytes);
+			buffer.put(outputBytes);
+			buffer.putInt(245);
+			buffer.putInt(-98765);
+			byte[] output2 = "Nice to meet you".getBytes();
+			buffer.put(outputBytes);
+			buffer.putInt(1000);
+			buffer.flip();
+			binChannel.write(buffer);
+			
+/*			
+			ByteBuffer buffer = ByteBuffer.allocate(outputBytes.length);
+			buffer.put(outputBytes);
+			
+			buffer.flip();
 			int numBytes = binChannel.write(buffer);
 			System.out.println("Number of bytes " + numBytes);
 			
@@ -44,6 +58,7 @@ public class Main {
 			buffer.flip();
 			if(buffer.hasArray()) {
 				System.out.println("Buffer bytes: " + new String(buffer.array()));
+			//	System.out.println("Buffer bytes: " + new String(outputBytes));
 			}
 			
 			// absolute read:
@@ -52,7 +67,10 @@ public class Main {
 			System.out.println(intBuffer.getInt(0));
 			intBuffer.flip();
 			numBytesRead = channel.read(intBuffer);	
-			System.out.println(intBuffer.getInt(0));			
+			intBuffer.flip();
+			System.out.println(intBuffer.getInt(0));	
+			System.out.println(intBuffer.getInt());	
+			
 			
 			// relative read:
 //			intBuffer.flip();
@@ -80,6 +98,8 @@ public class Main {
 //			
 //			System.out.println(int1);
 //			System.out.println(int2);
+ 
+ */
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
